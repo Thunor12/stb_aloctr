@@ -14,10 +14,22 @@ jobs:
         include:
           - os: ubuntu-latest
             cc: cc
+            backend: native
+          - os: ubuntu-latest
+            cc: cc
+            backend: malloc
           - os: macos-latest
             cc: cc
+            backend: native
+          - os: macos-latest
+            cc: cc
+            backend: malloc
           - os: windows-latest
             cc: gcc
+            backend: native
+          - os: windows-latest
+            cc: gcc
+            backend: malloc
 
     runs-on: ${{ matrix.os }}
 
@@ -46,6 +58,7 @@ jobs:
         shell: bash
         env:
           CC: ${{ matrix.cc }}
+          ALOCTR_USE_MALLOC: ${{ matrix.backend == 'malloc' && '1' || '' }}
         run: |
           if [ "$RUNNER_OS" = "Windows" ]; then
             export PATH="/mingw64/bin:$PATH"
@@ -58,6 +71,7 @@ jobs:
         shell: bash
         env:
           CC: ${{ matrix.cc }}
+          ALOCTR_USE_MALLOC: ${{ matrix.backend == 'malloc' && '1' || '' }}
         run: |
           if [ "$RUNNER_OS" = "Windows" ]; then
             export PATH="/mingw64/bin:$PATH"

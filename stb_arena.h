@@ -51,8 +51,35 @@ void aloctr_free(aloctr* aloc);
 /* ---------------------------------------------------------------------------
  * Platform-specific OS abstraction: page size, alloc, free, resize (may move).
  * Resize returns new pointer or NULL; caller must update aloc->buffer.
+ * Define ALOCTR_USE_MALLOC to force the malloc fallback on any platform (e.g. for testing).
  * --------------------------------------------------------------------------- */
-#if defined(_WIN32) || defined(_WIN64) || defined(WIN32) || defined(WIN64)
+#if defined(ALOCTR_USE_MALLOC)
+/* Fallback: malloc/realloc. No virtual memory; works on any hosted C implementation. */
+#define ALOCTR_OS_USE_MALLOC
+
+static size_t aloctr_os_pagesize(void)
+{
+    return 4096;
+}
+
+static void *aloctr_os_alloc(size_t size)
+{
+    return malloc(size);
+}
+
+static void aloctr_os_free(void *ptr, size_t size)
+{
+    (void)size;
+    free(ptr);
+}
+
+static void *aloctr_os_resize(void *ptr, size_t old_size, size_t new_size)
+{
+    (void)old_size;
+    return realloc(ptr, new_size);
+}
+
+#elif defined(_WIN32) || defined(_WIN64) || defined(WIN32) || defined(WIN64)
 
 #include <windows.h>
 
@@ -114,7 +141,7 @@ static void *aloctr_os_resize(void *ptr, size_t old_size, size_t new_size)
 }
 
 #else
-/* Fallback: malloc/realloc. No virtual memory; works on any hosted C implementation. */
+/* Unknown platform: use malloc fallback. */
 #define ALOCTR_OS_USE_MALLOC
 
 static size_t aloctr_os_pagesize(void)

@@ -25,14 +25,18 @@ int main(int argc, char **argv)
     if (!nob_mkdir_if_not_exists(BUILD_DIR)) return 1;
 
     if (argc >= 2 && strcmp(argv[1], "test") == 0) {
-        nob_cmd_append(&cmd, nob_compiler(), "-Wall", "-Wextra", "-Os", "-g", "-o", BUILD_DIR "/test_aloctr" NOB_EXE_EXT, "tests/test_aloctr.c");
+        nob_cmd_append(&cmd, nob_compiler(), "-Wall", "-Wextra", "-Os", "-g");
+        if (getenv("ALOCTR_USE_MALLOC")) nob_cmd_append(&cmd, "-DALOCTR_USE_MALLOC");
+        nob_cmd_append(&cmd, "-o", BUILD_DIR "/test_aloctr" NOB_EXE_EXT, "tests/test_aloctr.c");
         if (!nob_cmd_run(&cmd)) return 1;
         Nob_Cmd run = {0};
         nob_cmd_append(&run, "./" BUILD_DIR "/test_aloctr" NOB_EXE_EXT);
         return nob_cmd_run(&run) ? 0 : 1;
     }
 
-    nob_cmd_append(&cmd, nob_compiler(), "-Wall", "-Wextra", "-Os", "-g", "-o", BUILD_DIR "/basic" NOB_EXE_EXT, "examples/basic.c");
+    nob_cmd_append(&cmd, nob_compiler(), "-Wall", "-Wextra", "-Os", "-g");
+    if (getenv("ALOCTR_USE_MALLOC")) nob_cmd_append(&cmd, "-DALOCTR_USE_MALLOC");
+    nob_cmd_append(&cmd, "-o", BUILD_DIR "/basic" NOB_EXE_EXT, "examples/basic.c");
     if (!nob_cmd_run(&cmd)) return 1;
     return 0;
 }

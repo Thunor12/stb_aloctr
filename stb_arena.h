@@ -1,5 +1,5 @@
-#ifndef STB_ALOCTR_H
-#define STB_ALOCTR_H
+#ifndef STB_ARENA_H
+#define STB_ARENA_H
 
 // A simple allocator lib
 // Static alloc arenas

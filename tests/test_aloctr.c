@@ -1,8 +1,8 @@
 /*
  * Rigorous test suite for stb_arena (aloctr).
- * Compile with ALOCTR_IMPLEMENTATION and run; exit 0 = all pass, exit 1 = failure.
+ * Compile with STB_ALOCTR_IMPLEMENTATION and run; exit 0 = all pass, exit 1 = failure.
  */
-#define ALOCTR_IMPLEMENTATION
+#define STB_ALOCTR_IMPLEMENTATION
 #include "../stb_arena.h"
 #include <stdint.h>
 #include <stdio.h>

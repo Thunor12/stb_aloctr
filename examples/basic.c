@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#define ALOCTR_IMPLEMENTATION
+#define STB_ALOCTR_IMPLEMENTATION
 #include "../stb_arena.h"
 
 int basic_static(void)

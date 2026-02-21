@@ -15,6 +15,15 @@ static const char *nob_compiler(void) {
     return cc && cc[0] ? cc : "cc";
 }
 
+static void nob_append_sanitizer(Nob_Cmd *cmd) {
+    const char *s = getenv("SANITIZE");
+    if (!s || !s[0]) return;
+    if (strcmp(s, "leak") == 0)
+        nob_cmd_append(cmd, "-fsanitize=leak");
+    else if (strcmp(s, "address") == 0)
+        nob_cmd_append(cmd, "-fsanitize=address");
+}
+
 #define BUILD_DIR "build"
 
 int main(int argc, char **argv)
@@ -27,6 +36,7 @@ int main(int argc, char **argv)
     if (argc >= 2 && strcmp(argv[1], "test") == 0) {
         nob_cmd_append(&cmd, nob_compiler(), "-Wall", "-Wextra", "-Os", "-g");
         if (getenv("ALOCTR_USE_MALLOC")) nob_cmd_append(&cmd, "-DALOCTR_USE_MALLOC");
+        nob_append_sanitizer(&cmd);
         nob_cmd_append(&cmd, "-o", BUILD_DIR "/test_aloctr" NOB_EXE_EXT, "tests/test_aloctr.c");
         if (!nob_cmd_run(&cmd)) return 1;
         Nob_Cmd run = {0};
@@ -36,6 +46,7 @@ int main(int argc, char **argv)
 
     nob_cmd_append(&cmd, nob_compiler(), "-Wall", "-Wextra", "-Os", "-g");
     if (getenv("ALOCTR_USE_MALLOC")) nob_cmd_append(&cmd, "-DALOCTR_USE_MALLOC");
+    nob_append_sanitizer(&cmd);
     nob_cmd_append(&cmd, "-o", BUILD_DIR "/basic" NOB_EXE_EXT, "examples/basic.c");
     if (!nob_cmd_run(&cmd)) return 1;
     return 0;

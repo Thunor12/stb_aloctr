@@ -34,7 +34,7 @@ int main(int argc, char **argv)
     if (!nob_mkdir_if_not_exists(BUILD_DIR)) return 1;
 
     if (argc >= 2 && strcmp(argv[1], "test") == 0) {
-        nob_cmd_append(&cmd, nob_compiler(), "-Wall", "-Wextra", "-Os", "-g");
+        nob_cmd_append(&cmd, nob_compiler(), "-Wall", "-Wextra", "-Os", "-g", "-fsanitize=leak", "-fsanitize=address");
         if (getenv("ALOCTR_USE_MALLOC")) nob_cmd_append(&cmd, "-DALOCTR_USE_MALLOC");
         nob_append_sanitizer(&cmd);
         nob_cmd_append(&cmd, "-o", BUILD_DIR "/test_aloctr" NOB_EXE_EXT, "tests/test_aloctr.c");

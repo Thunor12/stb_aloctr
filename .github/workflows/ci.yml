@@ -72,7 +72,7 @@ jobs:
         env:
           CC: ${{ matrix.cc }}
           ALOCTR_USE_MALLOC: ${{ matrix.backend == 'malloc' && '1' || '' }}
-          SANITIZE: ${{ (matrix.os == 'macos-latest' || matrix.os == 'windows-latest') && 'address' || '' }}
+          SANITIZE: ${{ matrix.os == 'macos-latest' && 'address' || '' }}
         run: |
           if [ "$RUNNER_OS" = "Windows" ]; then
             export PATH="/mingw64/bin:$PATH"

@@ -44,7 +44,7 @@ jobs:
 
       - name: Install build tools (Ubuntu)
         if: matrix.os == 'ubuntu-latest'
-        run: sudo apt-get update && sudo apt-get install -y build-essential
+        run: sudo apt-get update && sudo apt-get install -y build-essential valgrind
 
       - name: Install build tools (Windows)
         if: matrix.os == 'windows-latest'
@@ -79,3 +79,7 @@ jobs:
           else
             ./nob test
           fi
+
+      - name: Run tests under Valgrind
+        if: matrix.os == 'ubuntu-latest'
+        run: valgrind --leak-check=full --error-exitcode=1 ./build/test_aloctr

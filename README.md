@@ -4,7 +4,7 @@ A simple cross-platform arena allocator (single-header, stb-style).
 
 - **Windows**: `VirtualAlloc` / `VirtualFree`; resize = alloc new, copy, free old.
 - **Linux, macOS, BSD (Unix-like)**: `mmap` / `munmap`; resize = mmap new, copy, munmap old.
-- **Other**: fallback to `malloc` / `realloc` / `free` (no virtual memory).
+- **Other**: fallback to `malloc` / `realloc` / `free`.
 
 No `_GNU_SOURCE` or other feature macros required. Static arenas work on any C11 implementation; dynamic arenas need one of the above platforms or the malloc fallback.
 

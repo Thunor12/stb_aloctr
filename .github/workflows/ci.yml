@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  build-and-test:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            cc: cc
+          - os: macos-latest
+            cc: cc
+          - os: windows-latest
+            cc: gcc
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install build tools (Ubuntu)
+        if: matrix.os == 'ubuntu-latest'
+        run: sudo apt-get update && sudo apt-get install -y build-essential
+
+      - name: Install build tools (Windows)
+        if: matrix.os == 'windows-latest'
+        uses: msys2/setup-msys2@v3
+        with:
+          msystem: MINGW64
+          update: true
+          install: mingw-w64-ucrt-x86_64-gcc
+
+      - name: Build nob
+        shell: bash
+        env:
+          CC: ${{ matrix.cc }}
+        run: |
+          if [ "$RUNNER_OS" = "Windows" ]; then
+            export PATH="/mingw64/bin:$PATH"
+            $CC -o nob.exe nob.c
+          else
+            $CC -o nob nob.c
+          fi
+
+      - name: Run tests
+        shell: bash
+        env:
+          CC: ${{ matrix.cc }}
+        run: |
+          if [ "$RUNNER_OS" = "Windows" ]; then
+            export PATH="/mingw64/bin:$PATH"
+            ./nob.exe test
+          else
+            ./nob test
+          fi

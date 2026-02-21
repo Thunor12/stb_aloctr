@@ -1,0 +1,14 @@
+# Build artifacts
+build/
+nob
+nob.exe
+nob.old
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+*.swp
+*.swo
+*~

@@ -36,7 +36,7 @@ jobs:
 
       - name: Install build tools (Windows)
         if: matrix.os == 'windows-latest'
-        uses: msys2/setup-msys2@v3
+        uses: msys2/setup-msys2@v2
         with:
           msystem: MINGW64
           update: true

@@ -1,6 +1,6 @@
 # Tests
 
-Rigorous test suite for the aloctr (stb_arena) allocator.
+Rigorous test suite for the aloctr (stb_aloctr) allocator.
 
 ## Run
 

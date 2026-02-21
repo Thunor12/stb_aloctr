@@ -18,12 +18,12 @@ jobs:
       - name: Create release asset
         run: |
           VERSION="${GITHUB_REF#refs/tags/}"
-          zip "stb_arena-${VERSION}.zip" stb_arena.h
+          zip "stb_aloctr-${VERSION}.zip" stb_aloctr.h
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: stb_arena-*.zip
+          files: stb_aloctr-*.zip
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
